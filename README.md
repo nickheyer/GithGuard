@@ -21,7 +21,7 @@ backup.sh -a <bg3_appdata> -b <backup_dir> -l <log_file> -m <max_backups> <game_
 First, clone GithGuard. Do so on the drive your BG3 save data is located for performance reasons.
 
 ```bash
-git clone github.com/nickheyer/githguard <path_to_githguard_dir>
+git clone git@github.com:nickheyer/GithGuard.git <path_to_githguard_dir>
 ```
 
 To use GithGuard with your Baldur's Gate 3 save data, add the following launch options to Steam:
