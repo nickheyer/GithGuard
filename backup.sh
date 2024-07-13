@@ -153,10 +153,10 @@ create_temp_backup
 log "Pre-launch backup created!"
 
 # Launch the game
-log "Launching game..."
-eval "${GAME_EXECUTABLE}" &
+log "Launching game executable: ${GAME_EXECUTABLE}"
+(eval "${GAME_EXECUTABLE}") &
 GAME_PID=$!
-log "Game was launched with PID: $GAME_PID"
+log "Game executable was launched with PID: $GAME_PID"
 
 # Compress and clean
 log "Starting compression and cleanup of backup data..."

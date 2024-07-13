@@ -2,10 +2,45 @@
 
 GithGuard is a backup script designed to safeguard your Baldur's Gate 3 save data. It creates backups before launching the game and compresses them while the game runs, ensuring that your progress is always protected. The script uses `rsync` for efficient backups if available, and falls back to `cp -r` if `rsync` is not installed.
 
-## Usage
+## Example Usage
+
+First, clone GithGuard and chmod to mark as an executable. It's recommended to do so on the drive your BG3 save data is located (for performance reasons).
 
 ```bash
-backup.sh -a <bg3_appdata> -b <backup_dir> -l <log_file> -m <max_backups> <game_executable>
+git clone git@github.com:nickheyer/GithGuard.git
+cd GithGuard
+chmod +x ./backup.sh
+
+# type "pwd" to see the below used <path_to_githguard_dir>
+```
+
+
+To use GithGuard with your Baldur's Gate 3 save data, add the following launch options to Steam:
+
+```bash
+<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3 "%command%"
+```
+
+#### Linux
+
+The below example shows what your Baldur's Gate 3 launch options might look like on a linux system using proton:
+
+```bash
+WINEDLLOVERRIDES="DWrite.dll=n,b" PROTON_NO_ESYNC=1 /mnt/gamedrive/scripts/GithGuard/backup.sh -a "/mnt/gamedrive/SteamLibrary/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios" "%command%"
+```
+
+#### Windows ( NOT TESTED )
+
+The below example shows what your Baldur's Gate 3 launch options might look like on a linux system using proton:
+
+```bash
+wsl bash -c '/mnt/gamedrive/scripts/GithGuard/backup.sh -a "/mnt/gamedrive/SteamLibrary/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios" "cmd.exe /C %command%"'
+```
+
+To manually invoke GithGuard, simply remove the steam launch "%command%" and run from a command line:
+
+```bash
+<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3
 ```
 
 ### Parameters
@@ -16,25 +51,6 @@ backup.sh -a <bg3_appdata> -b <backup_dir> -l <log_file> -m <max_backups> <game_
 - `-m <max_backups>`: Maximum number of backups to keep (default: 3)
 - `<game_executable>`: Path to the game executable (passed as `%command%` by Steam)
 
-## Example
-
-First, clone GithGuard. Do so on the drive your BG3 save data is located for performance reasons.
-
-```bash
-git clone git@github.com:nickheyer/GithGuard.git <path_to_githguard_dir>
-```
-
-To use GithGuard with your Baldur's Gate 3 save data, add the following launch options to Steam:
-
-```bash
-<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3 %command%
-```
-
-To use manually invoke GithGuard, simply remove the steam launch %command% and run from a command line:
-
-```bash
-<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3
-```
 
 ## Installation
 
