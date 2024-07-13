@@ -2,6 +2,13 @@
 
 GithGuard is a backup script designed to safeguard your Baldur's Gate 3 save data. It creates backups before launching the game and compresses them while the game runs, ensuring that your progress is always protected. The script uses `rsync` for efficient backups if available, and falls back to `cp -r` if `rsync` is not installed.
 
+
+
+![alt text="laizel laughing"](https://i.redd.it/zucyha82ercc1.jpeg)
+
+
+
+
 ## Example Usage
 
 First, clone GithGuard and chmod to mark as an executable. It's recommended to do so on the drive your BG3 save data is located (for performance reasons).
