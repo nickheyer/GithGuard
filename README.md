@@ -38,16 +38,26 @@ WINEDLLOVERRIDES="DWrite.dll=n,b" PROTON_NO_ESYNC=1 /mnt/gamedrive/scripts/GithG
 
 #### Windows ( NOT TESTED )
 
-The below example shows what your Baldur's Gate 3 launch options might look like on a linux system using proton:
+Windows uses WSL (Windows Subsystem for Linux) to invoke shell scripts and commands. Therefore you should theoretically be able to do the following:
 
 ```bash
 wsl bash -c '/mnt/gamedrive/scripts/GithGuard/backup.sh -a "/mnt/gamedrive/SteamLibrary/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios" "cmd.exe /C %command%"'
 ```
 
+### Outside of Steam Launcher
+
 To manually invoke GithGuard, simply remove the steam launch "%command%" and run from a command line:
+
+#### Linux
 
 ```bash
 <path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3
+```
+
+#### Windows ( NOT TESTED )
+
+```bash
+wsl bash -c '<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3'
 ```
 
 ### Parameters
