@@ -50,16 +50,34 @@ wsl bash -c '<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -m 3
 
 #### Restore Backup and Launch Game
 
+Restore the most recent backup:
+
+```bash
+<path_to_githguard_dir>/githguard.sh -R -a "/path/to/bg3_appdata"
+```
+
+Restore a specific backup:
+
+```bash
+<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -r "/path/to/backup_file.tar.gz"
+```
+
 Restore the most recent backup and launch the game:
 
 ```bash
-<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" %command%
+<path_to_githguard_dir>/githguard.sh -R -a "/path/to/bg3_appdata"  "%command%"
 ```
 
 Restore a specific backup and launch the game:
 
 ```bash
-<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -r "/path/to/backup_file.tar.gz" %command%
+<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -r "/path/to/backup_file.tar.gz" "%command%"
+```
+
+Restore the most recent backup and do not backup appdata beforehand (not recommended):
+
+```bash
+<path_to_githguard_dir>/githguard.sh -R -a "/path/to/bg3_appdata" -s
 ```
 
 ## Parameters
