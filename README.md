@@ -1,13 +1,8 @@
 # GithGuard
 
-GithGuard is a backup script designed to safeguard your Baldur's Gate 3 save data. It creates backups before launching the game and compresses them while the game runs, ensuring that your progress is always protected. The script uses `rsync` for efficient backups if available, and falls back to `cp -r` if `rsync` is not installed.
+GithGuard is a backup script designed to safeguard your Baldur's Gate 3 save data. It creates backups before launching the game and compresses them while the game runs, ensuring that your progress is always protected. Also, enables "save-scum" in honor mode!
 
-
-
-![alt text="laizel laughing"](https://i.redd.it/zucyha82ercc1.jpeg)
-
-
-
+![Laizel laughing](https://i.redd.it/zucyha82ercc1.jpeg)
 
 ## Example Usage
 
@@ -16,58 +11,70 @@ First, clone GithGuard and chmod to mark as an executable. It's recommended to d
 ```bash
 git clone git@github.com:nickheyer/GithGuard.git
 cd GithGuard
-chmod +x ./backup.sh
-
-# type "pwd" to see the below used <path_to_githguard_dir>
-```
-
-
-To use GithGuard with your Baldur's Gate 3 save data, add the following launch options to Steam:
-
-```bash
-<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3 "%command%"
+chmod +x ./githguard.sh
 ```
 
 #### Linux
 
-The below example shows what your Baldur's Gate 3 launch options might look like on a linux system using proton:
+Add the following launch options to Steam:
 
 ```bash
-WINEDLLOVERRIDES="DWrite.dll=n,b" PROTON_NO_ESYNC=1 /mnt/gamedrive/scripts/GithGuard/backup.sh -a "/mnt/gamedrive/SteamLibrary/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios" "%command%"
+<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -m 3 "%command%"
 ```
 
-#### Windows ( NOT TESTED )
-
-Windows uses WSL (Windows Subsystem for Linux) to invoke shell scripts and commands. Therefore you should theoretically be able to do the following:
+Example for Linux using Proton:
 
 ```bash
-wsl bash -c '/mnt/gamedrive/scripts/GithGuard/backup.sh -a "/mnt/gamedrive/SteamLibrary/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios" "cmd.exe /C %command%"'
+WINEDLLOVERRIDES="DWrite.dll=n,b" PROTON_NO_ESYNC=1 <path_to_githguard_dir>/githguard.sh -a "/mnt/gamedrive/SteamLibrary/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios" "%command%"
 ```
 
-### Outside of Steam Launcher
-
-To manually invoke GithGuard, simply remove the steam launch "%command%" and run from a command line:
-
-#### Linux
+Manually invoke GithGuard from the command line:
 
 ```bash
-<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3
+<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -m 3
 ```
 
-#### Windows ( NOT TESTED )
+#### Windows w/ WSL2 (EXPERIMENTAL)
+
+Add the following launch options to Steam:
 
 ```bash
-wsl bash -c '<path_to_githguard_dir>/backup.sh -a "/path/to/bg3_appdata" -m 3'
+wsl bash -c '<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" "cmd.exe /C %command%"'
 ```
 
-### Parameters
+Manually invoke GithGuard from the command line:
+
+```bash
+wsl bash -c '<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -m 3'
+```
+
+#### Restore Backup and Launch Game
+
+Restore the most recent backup and launch the game:
+
+```bash
+<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" %command%
+```
+
+Restore a specific backup and launch the game:
+
+```bash
+<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -r "/path/to/backup_file.tar.gz" %command%
+```
+
+## Parameters
 
 - `-a <bg3_appdata>`: Path to the Baldur's Gate 3 app data directory (required)
 - `-b <backup_dir>`: Path to the backup directory (default: `<script_directory>/backups`)
 - `-l <log_file>`: Path to the log file (default: `<backup_dir>/bg3_backup.log`)
 - `-m <max_backups>`: Maximum number of backups to keep (default: 3)
-- `<game_executable>`: Path to the game executable (passed as `%command%` by Steam)
-
+- `-p`: Mark backup(s) to persist, even if it becomes stale or exceeds max amount. (default: false)
+- `-K`: Finds and immediately kills any BG3 processes (without allowing the game to autosave on exit). (default: false)
+- `-k`: Creates persistent backup prior to finding and immediately killing any BG3 processes (without allowing the game to autosave on exit). (default: false)
+- `-R`: Restores the most recent tar.gz backup file in the provided backup directory. Can't be used with `-r`. (default: false)
+- `-r <restore_file>`: Restores a specific tar.gz backup file. Can't be used with `-R`. (default: none)
+- `-s`: Skip pre-emptive backup of appdata when restoring/writing to appdata directory. Not recommended. (default: false)
+- `<game_executable>`: Path to the game executable. Passed as `%command%` by Steam. (default: none)
 
 ## Installation
 
@@ -110,6 +117,10 @@ The script logs all operations to the specified log file. By default, the log fi
 
 GithGuard creates a timestamped backup in a temporary location before launching the game. It then compresses the backup and stores it in the specified backup directory. Old backups are automatically cleaned up, keeping only the most recent backups as specified by the `-m` parameter.
 
+## Restore
+
+GithGuard can also restore your Baldur's Gate 3 save data from a specified backup file. If no backup file is specified, it defaults to the most recent backup in the backup directory (if a backup directory is provided). The restored save data can optionally be followed by launching the game executable.
+
 ## Script Details
 
 ### Functions
@@ -123,6 +134,8 @@ GithGuard creates a timestamped backup in a temporary location before launching 
 - **create_temp_backup**: Creates a timestamped backup in the temporary location.
 - **compress_backup**: Compresses the temporary backup.
 - **cleanup_backups**: Removes old backups, keeping only the most recent specified number.
+- **restore_backup**: Restores a specified backup file to the BG3 app data directory.
+- **list_backups**: Lists available backups.
 
 ### Execution Flow
 
@@ -130,6 +143,7 @@ GithGuard creates a timestamped backup in a temporary location before launching 
 2. **Launch Game**: Launches the specified game executable.
 3. **Compression and Cleanup**: Compresses the temporary backup and cleans up old backups.
 4. **Wait for Game Exit**: Waits for the game to exit and logs the exit status.
+5. **Restore Backup**: Restores a specified backup file to the BG3 app data directory, optionally launching the game afterward.
 
 ## License
 
