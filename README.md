@@ -48,7 +48,7 @@ Manually invoke GithGuard from the command line:
 wsl bash -c '<path_to_githguard_dir>/githguard.sh -a "/path/to/bg3_appdata" -m 3'
 ```
 
-#### Restore Backup and Launch Game
+#### Restoring Backups
 
 Restore the most recent backup:
 
